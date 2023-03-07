@@ -31,6 +31,11 @@ public class Person {
         issuesList.set(issueIdx, issueVal);
     }
 
+    // Add an issue value to the issuesList
+    public void addIssue(double issueVal) {
+        issuesList.add(issueVal);
+    }
+
     // Get the id
     public int getID() {
         return id;

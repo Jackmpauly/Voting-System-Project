@@ -14,10 +14,10 @@ public class Voter extends Person{
 
     // Vote method
     public Candidate vote() {
-        double currentIssueDist = this.getDistance(candList.get(0));
-        Candidate votingFor = candList.get(0);
+        double currentIssueDist = this.getDistance(activeCandidateList.get(0));
+        Candidate votingFor = activeCandidateList.get(0);
 
-        for(Candidate c : candList) {
+        for(Candidate c : activeCandidateList) {
             if ( !c.getRunning() ) {
                 continue;
             }

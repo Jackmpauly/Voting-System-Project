@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Simulation {
     public static ArrayList<Candidate> candList;
@@ -7,9 +8,50 @@ public class Simulation {
 
     public Simulation() {
         candList = new ArrayList<Candidate>();
+        voterList = new ArrayList<Voter>();
         activeCandidateList = candList;
     }
 
+    public void generateAllVoters() {
+        createVoters(50, 2, true);
+        createVoters(50, 2, false);
+    }
+
+    public void createVoters(int numVoters, int numIssues, boolean negate) {
+        int vIndex = 0;
+        for(int i=0; i<numVoters; ++i) {
+            voterList.add( createVoter(vIndex++, numIssues, negate) );
+        }
+    }
+
+    public Voter createVoter(int vIndex, int numIssues, boolean negate) {
+        Voter v = new Voter(vIndex);
+        for(int j=0; j<numIssues; ++j) {
+            double issue = genPosIssueVal();
+            if (negate) {
+                issue*=-1;
+            }
+            v.addIssue( issue );
+        }
+        return v;
+    }
+    
+    public double genPosIssueVal() {
+        Random generator = new Random();
+        
+        double val = 300;
+        while(Math.abs(val) > 250) {
+            val = generator.nextGaussian();
+            // val = Math.abs(val);
+            val*=62.5;
+            val+=200;
+            // System.out.println("val: " + val);
+        }
+            
+        return val;
+    }
+
+    // run plurality election
     public Candidate runPlurality() {
         return this.runElection();
     }
