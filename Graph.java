@@ -21,11 +21,11 @@ public class Graph extends Canvas {
         Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.CYAN};
         // Set the color of the circle to the index of colors and draw a filled circle
         g.setColor(colors[colorIdx]);
-        g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+        g.fillOval(x - radius, 500 - y - radius, radius * 2, radius * 2);
 
         // Draw the stroke of the circle in black
         g.setColor(Color.BLACK);
-        g.drawOval(x - radius, y - radius, radius * 2, radius * 2);
+        g.drawOval(x - radius, 500 - y - radius, radius * 2, radius * 2);
     }
 
     public void paint(Graphics g) {

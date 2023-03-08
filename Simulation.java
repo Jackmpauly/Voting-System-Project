@@ -27,16 +27,26 @@ public class Simulation {
     public Voter createVoter(int vIndex, int numIssues, boolean negate) {
         Voter v = new Voter(vIndex);
         for(int j=0; j<numIssues; ++j) {
-            double issue = genPosIssueVal();
+            double issue = genIssueValNormal();
             if (negate) {
-                issue*=-1;
+                // issue*=-1;
             }
             v.addIssue( issue );
         }
         return v;
     }
+
+    public double genIssueValNormal() {
+        Random generator = new Random();
+
+        double val = generator.nextGaussian();
+
+        val*=62.5;
+
+        return val;
+    }
     
-    public double genPosIssueVal() {
+    public double genIssueVal() {
         Random generator = new Random();
         
         double val = 300;
