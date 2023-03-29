@@ -13,24 +13,82 @@ public class Simulation {
     }
 
     public void generateAllVoters() {
-        createVoters(50, 2, true);
-        createVoters(50, 2, false);
+        voterList.clear();
+        createVoters(251, 2);
     }
 
-    public void createVoters(int numVoters, int numIssues, boolean negate) {
-        int vIndex = 0;
-        for(int i=0; i<numVoters; ++i) {
-            voterList.add( createVoter(vIndex++, numIssues, negate) );
+    public void createManualCandidate() {
+        Candidate jack = new Candidate(0, "Jack Jackathy");
+        jack.addIssue(50.0);
+        jack.addIssue(150.0);
+        Candidate paul = new Candidate(1, "Paul Paulerson");
+        paul.addIssue(-87.0);
+        paul.addIssue(-42.0);
+
+        Candidate gillian = new Candidate(2, "Gillian Canicosa");
+        gillian.addIssue(-50.0);
+        gillian.addIssue(100.0);
+        Candidate natalie = new Candidate(3, "Cousin Natalie");
+        natalie.addIssue(75);
+        natalie.addIssue(-100);
+        Candidate gabriel = new Candidate(4, "Cousin Gabriel");
+        gabriel.addIssue(50);
+        gabriel.addIssue(-75);
+
+        candList.add( jack );
+        candList.add( paul );
+        candList.add( gillian );
+        candList.add( natalie );
+        candList.add( gabriel );
+    }
+
+    public void generateCandidates(int numCandidates) {
+        // int vIndex = 0;
+        for(int i=0; i<numCandidates; ++i) {
+            // candList.add()
         }
     }
 
-    public Voter createVoter(int vIndex, int numIssues, boolean negate) {
+    public void removeLastPlaceCandidate() {
+        if (activeCandidateList.size() <= 1) {
+            return;
+        }
+        // L + ratio
+        Candidate candLoser = activeCandidateList.get(0);
+        // finding the candidate with the least amount of votes
+        for (Candidate c : activeCandidateList) {
+            // System.out.println(c.getName() + ": " + c.getVotes());
+            if (c.getVotes() < candLoser.getVotes()) {
+                candLoser = c;
+            }
+        }
+        
+        activeCandidateList.remove(candLoser);
+    }
+
+    public void getCandidateVoteCounts() {
+        for (Candidate c : activeCandidateList) {
+            System.out.println(c.getName() + ": " + c.getVotes());
+        }
+    }
+
+    public void resetActiveCandidateVoteCounts() {
+        for (Candidate c : activeCandidateList) {
+            c.resetVotes();
+        }
+    }
+
+    public void createVoters(int numVoters, int numIssues) {
+        int vIndex = 0;
+        for(int i=0; i<numVoters; ++i) {
+            voterList.add( createVoter(vIndex++, numIssues) );
+        }
+    }
+
+    public Voter createVoter(int vIndex, int numIssues) {
         Voter v = new Voter(vIndex);
         for(int j=0; j<numIssues; ++j) {
             double issue = genIssueValNormal();
-            if (negate) {
-                // issue*=-1;
-            }
             v.addIssue( issue );
         }
         return v;
@@ -91,7 +149,7 @@ public class Simulation {
     // run election (first written for plurality voting, will change later)
     public Candidate runElection() {
         for (Voter v : voterList) {
-            v.vote().incrementVotes();
+            v.vote().incrementVotes(); // NEED TO CHANGE. CANDIDATE VOTES ARE INCREMENTED IN THE VOTE METHOD
         }
 
         Candidate candLeader = activeCandidateList.get(0);
@@ -103,6 +161,18 @@ public class Simulation {
 
         // RETURN THE WINNER!!
         System.out.println(candLeader.getName() + " wins!");
+        return candLeader;
+    }
+
+    // Method to fetch the Candidate with the most votes
+    public Candidate getWinner() {
+        Candidate candLeader = activeCandidateList.get(0);
+        for (Candidate c : activeCandidateList) {
+            if (c.getVotes() > candLeader.getVotes() ) {
+                candLeader = c;
+            }
+        }
+
         return candLeader;
     }
 }
