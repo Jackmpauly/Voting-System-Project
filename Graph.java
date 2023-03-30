@@ -55,6 +55,8 @@ public class Graph extends JPanel {
         g.drawOval(x - radius, 500 - y - radius, radius * 2, radius * 2);
     }
 
+    // TODO: Draw rectangle. make it bigger too
+
     public static void drawLine(Graphics g, int x1, int y1, int x2, int y2, int colorIdx) {
         // increase x and y by 250 to give them the correct coords on the graph
         x1+=250;
@@ -97,20 +99,21 @@ public class Graph extends JPanel {
         }
 
         for(Voter each : Simulation.voterList) {
+            Candidate c = each.vote();
             drawDot(g, 
                     (each.getIssuesList().get(0)).intValue(), 
                     (each.getIssuesList().get(1)).intValue(), 
                     4, 
-                    3);
-            Candidate c = each.vote();
-            if (c != null) {
-                drawLine(g,
-                        (each.getIssuesList().get(0)).intValue(), 
-                        (each.getIssuesList().get(1)).intValue(), 
-                        (c.getIssuesList().get(0)).intValue(),
-                        (c.getIssuesList().get(1)).intValue(),
-                        c.getID());
-            }
+                    c.getID());
+            // Candidate c = each.vote(); // NEEDS TO BE MOVED
+            // if (c != null) {
+            //     drawLine(g,
+            //             (each.getIssuesList().get(0)).intValue(), 
+            //             (each.getIssuesList().get(1)).intValue(), 
+            //             (c.getIssuesList().get(0)).intValue(),
+            //             (c.getIssuesList().get(1)).intValue(),
+            //             c.getID());
+            // }
         }
         sim.getCandidateVoteCounts();
         System.out.println("# of candidates: " + Simulation.activeCandidateList.size());

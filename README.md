@@ -15,3 +15,11 @@ Classes:
 - Person
   - Candidate
   - Voter
+
+
+TODO: 3/30/23
+
+- Bimodal distribution (two normal distributions)
+- Autogenerate candidates
+- Voting system type (settings)
+- (maybe) move some functionality to the simulation class?

@@ -6,8 +6,11 @@ public class Runner {
         //     System.out.println("(" + each.getIssuesList().get(0) + ", " + each.getIssuesList().get(1) + ")");
         // }
 
-        Graph g = new Graph();
+        System.out.println("Select Voting Mode: ");
+        
+        Simulation.votingMode = 0;
 
+        Graph g = new Graph();
         g.start();
     }
 }

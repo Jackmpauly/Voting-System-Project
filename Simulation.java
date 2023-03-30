@@ -5,11 +5,13 @@ public class Simulation {
     public static ArrayList<Candidate> candList;
     public static ArrayList<Candidate> activeCandidateList;
     public static ArrayList<Voter> voterList;
+    public static int votingMode; // 0 = plurality, 1 = ranked-choice, 2 = ???
 
     public Simulation() {
         candList = new ArrayList<Candidate>();
         voterList = new ArrayList<Voter>();
         activeCandidateList = candList;
+        votingMode = 0;
     }
 
     public void generateAllVoters() {
@@ -88,35 +90,28 @@ public class Simulation {
     public Voter createVoter(int vIndex, int numIssues) {
         Voter v = new Voter(vIndex);
         for(int j=0; j<numIssues; ++j) {
-            double issue = genIssueValNormal();
+            double issue = genIssueValNormal(62.5);
             v.addIssue( issue );
         }
         return v;
     }
 
-    public double genIssueValNormal() {
+    public double genIssueValNormal(double multiplier) {
         Random generator = new Random();
-
         double val = generator.nextGaussian();
-
-        val*=62.5;
-
+        val*=multiplier;
         return val;
     }
     
-    public double genIssueVal() {
+    public double genIssueValBiModal() {
+        double issue = genIssueValNormal(31.25) + 125;
+
         Random generator = new Random();
-        
-        double val = 300;
-        while(Math.abs(val) > 250) {
-            val = generator.nextGaussian();
-            // val = Math.abs(val);
-            val*=62.5;
-            val+=200;
-            // System.out.println("val: " + val);
+        int posneg = generator.nextInt(1);
+        if (posneg % 2 == 0) {
+            issue*=-1;
         }
-            
-        return val;
+        return issue;
     }
 
     // run plurality election
@@ -169,7 +164,7 @@ public class Simulation {
         Candidate candLeader = activeCandidateList.get(0);
         for (Candidate c : activeCandidateList) {
             if (c.getVotes() > candLeader.getVotes() ) {
-                candLeader = c;
+                candLeader = c; 
             }
         }
 
