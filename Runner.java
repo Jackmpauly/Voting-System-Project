@@ -7,8 +7,8 @@ public class Runner {
         // }
 
         System.out.println("Select Voting Mode: ");
-        
-        Simulation.votingMode = 0;
+
+        // Simulation.votingMode = 0;
 
         Graph g = new Graph();
         g.start();
