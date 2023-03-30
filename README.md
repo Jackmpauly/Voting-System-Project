@@ -16,7 +16,7 @@ Classes:
   - Candidate
   - Voter
 
-Week 8 Update:
+## Week 8 Update: ##
 Execution:
 Download files
 Type javac *.java
