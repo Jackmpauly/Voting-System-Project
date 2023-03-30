@@ -13,6 +13,7 @@ public class Runner {
         //     System.out.println("(" + each.getIssuesList().get(0) + ", " + each.getIssuesList().get(1) + ")");
         // }
 
+
         System.out.println("          WELCOME TO VOTING SIMULATION");
         
         // get user input for the voting mode
@@ -45,7 +46,8 @@ public class Runner {
                 System.out.println("INVALID INPUT");
             }
         }
-        
+
+
 
         Graph g = new Graph();
         g.start();
