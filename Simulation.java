@@ -20,9 +20,14 @@ public class Simulation {
     public Simulation() {
         candList = new ArrayList<Candidate>();
         voterList = new ArrayList<Voter>();
-        activeCandidateList = candList;;
+        activeCandidateList = candList;
+        System.out.println("here");
         activeVotingMode = VOTINGMODES.PLURALITY;
         activeDistribution = DISTRIBUTION.BIMODAL;
+    }
+
+    public void setActiveCandList() {
+        activeCandidateList = candList;
     }
 
     public void generateAllVoters() {

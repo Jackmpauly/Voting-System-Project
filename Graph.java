@@ -27,6 +27,7 @@ public class Graph extends JPanel {
         // Setting up our simulation
         sim.createManualCandidate();
         sim.generateAllVoters();
+        sim.setActiveCandList();
         System.out.println("-----------STARTING SIMULATION-----------");
 
         frame.addKeyListener(new KeyAdapter() {
@@ -53,6 +54,26 @@ public class Graph extends JPanel {
         // Draw the stroke of the circle in black
         g.setColor(Color.BLACK);
         g.drawOval(x - radius, 500 - y - radius, radius * 2, radius * 2);
+    }
+
+    public static void drawSqr(Graphics g, int x, int y, int side, int colorIdx) {
+        System.out.println("got here");
+        x+=250;
+        y+=250;
+
+        g.setColor(colors[colorIdx]);
+        g.fillRect(x - side, 500 - y - side, side * 2, side * 2);
+
+        g.setColor(Color.BLACK);
+        g.drawRect(x - side, 500 - y - side, side * 2, side * 2);
+    }
+
+    public static void writeName(Graphics g, String name, int x, int y, int colorIdx) {
+        x += 250;
+        y += 250;
+
+        g.setColor(colors[colorIdx]);
+        g.drawString(name, x, 500 - y);
     }
 
     // TODO: Draw rectangle. make it bigger too
@@ -87,34 +108,28 @@ public class Graph extends JPanel {
         // Drawing the grid
         g.drawLine(250, 500, 250, 0);
         g.drawLine(0, 250, 500, 250);
-
-
+        
+        for(int i = 0; i < Simulation.voterList.size(); ++i) {
+            Voter v = Simulation.voterList.get(i);
+            Candidate c = v.vote();
+            
+            drawDot(g, 
+                (v.getIssuesList().get(0)).intValue(), 
+                (v.getIssuesList().get(1)).intValue(), 
+                4, 
+                c.getID());
+        }
         // DRAW THE CANDIDATES
-        for(Candidate each : Simulation.activeCandidateList) {
-            drawDot(g, 
-                    (each.getIssuesList().get(0)).intValue(), 
-                    (each.getIssuesList().get(1)).intValue(), 
+        for(int i = 0; i < Simulation.activeCandidateList.size(); ++i) {
+            Candidate c = Simulation.activeCandidateList.get(i);
+            drawSqr(g,
+                    (c.getIssuesList().get(0)).intValue(), 
+                    (c.getIssuesList().get(1)).intValue(), 
                     6, 
-                    each.getID());
+                    c.getID());
+            writeName(g, c.getName(), (c.getIssuesList().get(0)).intValue(), (c.getIssuesList().get(1)).intValue(), c.getID());   
         }
 
-        for(Voter each : Simulation.voterList) {
-            Candidate c = each.vote();
-            drawDot(g, 
-                    (each.getIssuesList().get(0)).intValue(), 
-                    (each.getIssuesList().get(1)).intValue(), 
-                    4, 
-                    c.getID());
-            // Candidate c = each.vote(); // NEEDS TO BE MOVED
-            // if (c != null) {
-            //     drawLine(g,
-            //             (each.getIssuesList().get(0)).intValue(), 
-            //             (each.getIssuesList().get(1)).intValue(), 
-            //             (c.getIssuesList().get(0)).intValue(),
-            //             (c.getIssuesList().get(1)).intValue(),
-            //             c.getID());
-            // }
-        }
         sim.getCandidateVoteCounts();
         System.out.println("# of candidates: " + Simulation.activeCandidateList.size());
         System.out.println("Winner of this round: " + sim.getWinner().getName() + "(" + colors[sim.getWinner().getID()].toString() + ")" );
