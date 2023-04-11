@@ -57,7 +57,6 @@ public class Graph extends JPanel {
     }
 
     public static void drawSqr(Graphics g, int x, int y, int side, int colorIdx) {
-        System.out.println("got here");
         x+=250;
         y+=250;
 
