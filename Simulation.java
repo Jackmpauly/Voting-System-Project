@@ -1,12 +1,16 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.BufferedReader;  
+import java.io.FileReader;  
+import java.io.IOException;
 
 public class Simulation {
-    public static ArrayList<Candidate> candList;
-    public static ArrayList<Candidate> activeCandidateList;
-    public static ArrayList<Voter> voterList;
-    private static VOTINGMODES activeVotingMode;
-    private static DISTRIBUTION activeDistribution;
+    public static ArrayList<Candidate> candList = new ArrayList<Candidate>();
+    public static ArrayList<Candidate> activeCandidateList = candList;
+    public static ArrayList<Voter> voterList = new ArrayList<Voter>();
+    private static VOTINGMODES activeVotingMode = VOTINGMODES.RANKEDCHOICE;
+    private static DISTRIBUTION activeDistribution = DISTRIBUTION.BIMODAL;
+    private static int numIssues = 3;
 
     enum DISTRIBUTION {
         NORMAL,
@@ -22,23 +26,23 @@ public class Simulation {
         voterList = new ArrayList<Voter>();
         activeCandidateList = candList;
         System.out.println("here");
-        activeVotingMode = VOTINGMODES.PLURALITY;
-        activeDistribution = DISTRIBUTION.BIMODAL;
     }
 
-    public void setActiveCandList() {
+    public static void setActiveCandList() {
         activeCandidateList = candList;
     }
 
-    public void generateAllVoters() {
+    public static void generateAllVoters() {
         voterList.clear();
-        createVoters(251, 2);
+        createVoters(251, numIssues);
     }
 
-    public void createManualCandidate() {
+    public static void createManualCandidate(){
+        generateCandidates();
+        
         Candidate jack = new Candidate(0, "Jack Jackathy");
         jack.addIssue(50.0);
-        jack.addIssue(150.0);
+        jack.addIssue(25.0);
         Candidate paul = new Candidate(1, "Paul Paulerson");
         paul.addIssue(-87.0);
         paul.addIssue(-42.0);
@@ -54,62 +58,71 @@ public class Simulation {
         gabriel.addIssue(-75);
 
         candList.add( jack );
-        System.out.println("Jack: RED");
         candList.add( paul );
-        System.out.println("Paul: BLUE");
         candList.add( gillian );
-        System.out.println("Gillian: GREEN");
         candList.add( natalie );
-        System.out.println("Natalie: ORANGE");
         candList.add( gabriel );
-        System.out.println("Gabriel: CYAN");
-
     }
 
-    public void generateCandidates(int numCandidates) {
-        // int vIndex = 0;
-        for(int i=0; i<numCandidates; ++i) {
-            // candList.add()
+    public static void generateCandidates() {
+        String line = "";
+        String splitBy = ",";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("simulation1.csv"));
+            while((line = br.readLine()) != null) {
+                String[] csv = line.split(splitBy);
+                System.out.println(csv[0]);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
-    public void removeLastPlaceCandidate() {
+    public static void removeLastPlaceCandidate() {
         if (activeCandidateList.size() <= 1) {
             return;
         }
         // L + ratio
         Candidate candLoser = activeCandidateList.get(0);
+
+
         // finding the candidate with the least amount of votes
-        for (Candidate c : activeCandidateList) {
-            // System.out.println(c.getName() + ": " + c.getVotes());
-            if (c.getVotes() < candLoser.getVotes()) {
-                candLoser = c;
+        for(int i=0; i < activeCandidateList.size(); ++i) {
+            if (activeCandidateList.get(i).getVotes() < candLoser.getVotes()) {
+                candLoser = activeCandidateList.get(i);
             }
         }
         
         activeCandidateList.remove(candLoser);
     }
 
-    public void getCandidateVoteCounts() {
-        for (Candidate c : activeCandidateList) {
+    public static void getCandidateVoteCounts() {
+        Candidate c;
+        for(int i=0; i < activeCandidateList.size(); ++i) {
+            c = activeCandidateList.get(i);
             System.out.println(c.getName() + " (" + c.getID() + "): " + c.getVotes());
         }
     }
 
-    public void resetActiveCandidateVoteCounts() {
-        for (Candidate c : activeCandidateList) {
+    public static void resetActiveCandidateVoteCounts() {
+        Candidate c;
+        for(int i=0; i < activeCandidateList.size(); ++i) {
+            c = activeCandidateList.get(i);
             c.resetVotes();
         }
     }
 
-    public void createVoters(int numVoters, int numIssues) {
+    public static void createVoters(int numVoters, int numIssues) {
+        // System.out.println("creating voters");
         int vIndex = 0;
         for(int i=0; i<numVoters; ++i) {
             voterList.add( createVoter(vIndex++, numIssues) );
         }
     }
 
-    public Voter createVoter(int vIndex, int numIssues) {
+    public static Voter createVoter(int vIndex, int numIssues) {
         Voter v = new Voter(vIndex);
         for(int j=0; j<numIssues; ++j) {
             double issue;
@@ -129,7 +142,7 @@ public class Simulation {
         return v;
     }
 
-    public double genIssueValNormal(double multiplier) {
+    public static double genIssueValNormal(double multiplier) {
         Random generator = new Random();
         double val = generator.nextGaussian();
         val*=multiplier;
@@ -140,7 +153,7 @@ public class Simulation {
     // Passes in a double, disMode, that defines the mode of the distribution
     // Gets a normal-distribution issue value with multiplier mode/divisor to limit the size of the graph
     // HIGHER DIVISOR MEANS MORE CLUMPED. should be between 1 and 4
-    public double genIssueValBiModal(double disMode) {
+    public static double genIssueValBiModal(double disMode) {
         double issue = genIssueValNormal((disMode/2)) + disMode;
 
         Random generator = new Random();
@@ -157,7 +170,7 @@ public class Simulation {
         return this.runElection();
     }
 
-    // run ranked choice voting
+    // run ranked choice voting UNUSED
     public Candidate runRankedChoice(int numCandidates) {
         Candidate currWinner = runElection();
 
@@ -198,11 +211,11 @@ public class Simulation {
     }
 
     // Method to fetch the Candidate with the most votes
-    public Candidate getWinner() {
+    public static Candidate getWinner() {
         Candidate candLeader = activeCandidateList.get(0);
-        for (Candidate c : activeCandidateList) {
-            if (c.getVotes() > candLeader.getVotes() ) {
-                candLeader = c; 
+        for (int i=0; i<activeCandidateList.size(); i++) {
+            if (activeCandidateList.get(i).getVotes() > candLeader.getVotes() ) {
+                candLeader = activeCandidateList.get(i);
             }
         }
 
@@ -210,13 +223,13 @@ public class Simulation {
     }
 
     // Getter for the active voting mode
-    public VOTINGMODES getActiveMode() {
+    public static VOTINGMODES getActiveMode() {
         return activeVotingMode;
     }
 
     // Setter for the active voting mode.
     // Passes in an integer. Integer corresponds to a different voting mode
-    public void setActiveMode(int mode) {
+    public static void setActiveMode(int mode) {
         switch (mode) {
             case 1:
                 activeVotingMode = VOTINGMODES.PLURALITY;
@@ -231,13 +244,13 @@ public class Simulation {
     }
 
     // Getter for the active values distribution
-    public DISTRIBUTION getActiveDistribution() {
+    public static DISTRIBUTION getActiveDistribution() {
         return activeDistribution;
     }
 
     // Setter for the active distribution
     // Passes in an integer. Integer corresponds to a different distribution
-    public void setActiveDistribution(int dist) {
+    public static void setActiveDistribution(int dist) {
         switch (dist) {
             case 1:
                 activeDistribution = DISTRIBUTION.NORMAL;

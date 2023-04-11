@@ -7,11 +7,6 @@ public class Runner {
 
         int votingMode;
         int voterDistrMode;
-        // Simulation sim = new Simulation();
-        // sim.generateAllVoters();
-        // for(Voter each : Simulation.voterList) {
-        //     System.out.println("(" + each.getIssuesList().get(0) + ", " + each.getIssuesList().get(1) + ")");
-        // }
 
 
         System.out.println("          WELCOME TO VOTING SIMULATION");
@@ -25,6 +20,7 @@ public class Runner {
             String userInput = in.nextLine();
 
             if (userInput.equals("1") || userInput.equals("2") || userInput.equals("3")){
+                Simulation.setActiveMode(Integer.valueOf(userInput));
                 break;
             }
             else{
@@ -40,14 +36,14 @@ public class Runner {
             String userInput = in.nextLine();
 
             if (userInput.equals("1") || userInput.equals("2")){
+                Simulation.setActiveDistribution(Integer.valueOf(userInput));
                 break;
             }
             else{
                 System.out.println("INVALID INPUT");
             }
         }
-
-
+        in.close();
 
         Graph g = new Graph();
         g.start();

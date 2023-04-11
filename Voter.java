@@ -20,7 +20,12 @@ public class Voter extends Person{
         Candidate votingFor = activeCandidateList.get(0);
         double currentIssueDist = this.getDistance(activeCandidateList.get(0));
 
-        for(Candidate c : activeCandidateList) {
+        // System.out.println("got here");
+
+        // MIGHT NEED TO CHANGE HERE
+        Candidate c;
+        for (int i=0; i<activeCandidateList.size(); i++) {
+            c = activeCandidateList.get(i);
             if ( !c.getRunning() ) {
                 continue;
             }
