@@ -7,6 +7,7 @@ public class Runner {
 
         int votingMode;
         int voterDistrMode;
+        int numIssues;
 
 
         System.out.println("          WELCOME TO VOTING SIMULATION");
@@ -20,7 +21,7 @@ public class Runner {
             String userInput = in.nextLine();
 
             if (userInput.equals("1") || userInput.equals("2") || userInput.equals("3")){
-                Simulation.setActiveMode(Integer.valueOf(userInput));
+                votingMode = Integer.valueOf(userInput);
                 break;
             }
             else{
@@ -36,16 +37,39 @@ public class Runner {
             String userInput = in.nextLine();
 
             if (userInput.equals("1") || userInput.equals("2")){
-                Simulation.setActiveDistribution(Integer.valueOf(userInput));
+                voterDistrMode = Integer.valueOf(userInput);
                 break;
             }
             else{
                 System.out.println("INVALID INPUT");
             }
         }
+        // get user input for number of issues
+        while(true){
+            System.out.println("\nPlease enter number of issues per person: ");
+            String userInput = in.nextLine();
+
+            try {
+                Integer.parseInt(userInput);
+                numIssues = Integer.valueOf(userInput);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("INVALID INPUT");
+            }
+        }
         in.close();
 
-        Graph g = new Graph();
+        // Setting up the simulation object
+
+        Simulation s = new Simulation(votingMode, voterDistrMode);
+
+        // Create the candidates, generate the voters, set the active candidates
+        s.createManualCandidate();
+        s.generateAllVoters(251, numIssues);
+        s.castVotes();
+        s.setActiveCandList();
+
+        Graph g = new Graph(s);
         g.start();
     }
 }

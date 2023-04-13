@@ -1,30 +1,28 @@
-import java.awt.Canvas;
+// import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.Component;
+// import java.awt.Component;
 import javax.swing.JFrame;
 
-import java.awt.*;
-import java.awt.event.*;
+// import java.awt.*;
+// import java.awt.event.*;
 import javax.swing.*;
 
 public class Graph extends JPanel {
 
     private static Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.CYAN};
-    private static int count = 0;
+    // private static int count = 0;
+    private Simulation mySim;
 
-    public Graph() {
-        // Setting up our simulation
-        Simulation.createManualCandidate();
-        Simulation.generateAllVoters();
-        Simulation.setActiveCandList();
+    public Graph(Simulation s) {
+        mySim = s;
     }
 
     public void start() {
         JFrame frame = new JFrame("My Graph");
-        Graph canvas = this;
+        Graph canvas = this; // Might need to fix this...
         frame.add(canvas);
         frame.setSize(500, 500);
         // frame.pack();
@@ -42,6 +40,8 @@ public class Graph extends JPanel {
             }
         });
     }
+
+    // START: GRAPHICS DRAW METHODS
 
     public static void drawDot(Graphics g, int x, int y, int radius, int colorIdx) {
         // increase x and y by 250 to give them the correct coords on the graph
@@ -98,10 +98,12 @@ public class Graph extends JPanel {
         // g.setColor( colors[colorIdx] );
     }
 
+    // END: GRAPHICS DRAW METHODS
+
+    // Method to accelerate the election/vote
     public void accelerateVote(Graph c) {
         System.out.println("-----------NEXT VOTING ROUND-----------");
-        Simulation.removeLastPlaceCandidate();
-        Simulation.resetActiveCandidateVoteCounts();
+        mySim.nextRound();
         c.repaint();
     }
 
@@ -110,9 +112,10 @@ public class Graph extends JPanel {
         g.drawLine(250, 500, 250, 0);
         g.drawLine(0, 250, 500, 250);
         
-        for(int i = 0; i < Simulation.voterList.size(); ++i) {
-            Voter v = Simulation.voterList.get(i);
-            Candidate c = v.vote();
+        // Draw each voter
+        for(int i = 0; i < mySim.voterList.size(); ++i) {
+            Voter v = mySim.voterList.get(i);
+            Candidate c = v.getMyVote();
             
             drawDot(g, 
                 (v.getIssuesList().get(0)).intValue(), 
@@ -121,15 +124,17 @@ public class Graph extends JPanel {
                 c.getID()
             );
         }
-        // DRAW THE CANDIDATES
-        for(int i = 0; i < Simulation.activeCandidateList.size(); ++i) {
-            Candidate c = Simulation.activeCandidateList.get(i);
+
+        // Draw each candidate
+        for(int i = 0; i < mySim.activeCandidateList.size(); ++i) {
+            Candidate c = mySim.activeCandidateList.get(i);
             drawSqr(g,
                 (c.getIssuesList().get(0)).intValue(), 
                 (c.getIssuesList().get(1)).intValue(), 
                 6, 
                 c.getID()
             );
+            // Write their name too
             writeName(g,
                 c.getName(),
                 (c.getIssuesList().get(0)).intValue(),
@@ -138,9 +143,9 @@ public class Graph extends JPanel {
             );   
         }
 
-        Simulation.getCandidateVoteCounts();
-        System.out.println("# of candidates: " + Simulation.activeCandidateList.size());
-        System.out.println("Winner of this round: " + Simulation.getWinner().getName() );
+        mySim.getCandidateVoteCounts();
+        System.out.println("# of candidates: " + mySim.activeCandidateList.size());
+        System.out.println("Winner of this round: " + mySim.getWinner().getName() );
         System.out.println();
     }
 }

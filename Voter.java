@@ -4,18 +4,19 @@ public class Voter extends Person{
     
     private ArrayList<Candidate> candList;
     private ArrayList<Candidate> activeCandidateList;
+    private Candidate myVote;
     // FIX ALL INSTANCES OF CANDLIST // CHANGE TO activeCandidateList
 
-    public Voter(int id) {
+    public Voter(int id, Simulation s) {
         super(id);
-        this.candList = Simulation.candList;
-        this.activeCandidateList = Simulation.activeCandidateList;
+        this.candList = s.candList;
+        this.activeCandidateList = s.activeCandidateList;
     }
 
     // Vote method
-    public Candidate vote() {
+    public void vote() {
         if (activeCandidateList.isEmpty()) {
-            return null;
+            return;
         }
         Candidate votingFor = activeCandidateList.get(0);
         double currentIssueDist = this.getDistance(activeCandidateList.get(0));
@@ -37,6 +38,11 @@ public class Voter extends Person{
         }
         
         votingFor.incrementVotes();
-        return votingFor;
+        myVote = votingFor;
+    }
+
+    // Getter for myVote
+    public Candidate getMyVote() {
+        return myVote;
     }
 }

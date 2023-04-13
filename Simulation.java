@@ -5,12 +5,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Simulation {
-    public static ArrayList<Candidate> candList = new ArrayList<Candidate>();
-    public static ArrayList<Candidate> activeCandidateList = candList;
-    public static ArrayList<Voter> voterList = new ArrayList<Voter>();
-    private static VOTINGMODES activeVotingMode = VOTINGMODES.RANKEDCHOICE;
-    private static DISTRIBUTION activeDistribution = DISTRIBUTION.BIMODAL;
-    private static int numIssues = 3;
+    public ArrayList<Candidate> candList = new ArrayList<Candidate>();
+    public ArrayList<Candidate> activeCandidateList = candList;
+    public ArrayList<Voter> voterList = new ArrayList<Voter>();
+
+    // Simulation Settings
+    private VOTINGMODES activeVotingMode;
+    private DISTRIBUTION activeDistribution;
 
     enum DISTRIBUTION {
         NORMAL,
@@ -21,23 +22,36 @@ public class Simulation {
         RANKEDCHOICE,
     }
 
+    // CONSTRUCTORS
     public Simulation() {
         candList = new ArrayList<Candidate>();
         voterList = new ArrayList<Voter>();
         activeCandidateList = candList;
-        System.out.println("here");
+        
+        // Default Sim Settings
+        activeVotingMode = VOTINGMODES.RANKEDCHOICE;
+        activeDistribution = DISTRIBUTION.BIMODAL;
+    }
+    public Simulation(int votingMode, int voterDistrMode) {
+        candList = new ArrayList<Candidate>();
+        voterList = new ArrayList<Voter>();
+        activeCandidateList = candList;
+        
+        // Custom Sim Settings
+        setActiveMode(votingMode);
+        setActiveDistribution(voterDistrMode);
+
     }
 
-    public static void setActiveCandList() {
+    // METHOD TO (RE)SET THE ACTIVE CANDIDATES TO ALL CANDIDATES
+    public void setActiveCandList() {
         activeCandidateList = candList;
     }
 
-    public static void generateAllVoters() {
-        voterList.clear();
-        createVoters(251, numIssues);
-    }
+    // START: CANDIDATE GENERATION
 
-    public static void createManualCandidate(){
+    // Method to create candidates manually
+    public void createManualCandidate(){
         generateCandidates();
         
         Candidate jack = new Candidate(0, "Jack Jackathy");
@@ -64,6 +78,7 @@ public class Simulation {
         candList.add( gabriel );
     }
 
+    // Test method to generate candidates via a csv file
     public static void generateCandidates() {
         String line = "";
         String splitBy = ",";
@@ -80,7 +95,10 @@ public class Simulation {
 
     }
 
-    public static void removeLastPlaceCandidate() {
+    // Candidate Management
+
+    // Removing the last place candidate
+    public void removeLastPlaceCandidate() {
         if (activeCandidateList.size() <= 1) {
             return;
         }
@@ -98,7 +116,8 @@ public class Simulation {
         activeCandidateList.remove(candLoser);
     }
 
-    public static void getCandidateVoteCounts() {
+    // Printing the number of votes of each candidate
+    public void getCandidateVoteCounts() {
         Candidate c;
         for(int i=0; i < activeCandidateList.size(); ++i) {
             c = activeCandidateList.get(i);
@@ -106,7 +125,8 @@ public class Simulation {
         }
     }
 
-    public static void resetActiveCandidateVoteCounts() {
+    // Reseting the number of votes for each active candidate
+    public void resetActiveCandidateVoteCounts() {
         Candidate c;
         for(int i=0; i < activeCandidateList.size(); ++i) {
             c = activeCandidateList.get(i);
@@ -114,16 +134,21 @@ public class Simulation {
         }
     }
 
-    public static void createVoters(int numVoters, int numIssues) {
-        // System.out.println("creating voters");
+    // START: VOTER GENERATION
+
+    // METHOD TO GENERATE VOTERS GIVEN DISTRIBUTION
+    public void generateAllVoters(int numVoters, int numIssues) {
+        voterList.clear(); // clear the voterList
+
+        // Loop through the number of voters and create voters.
         int vIndex = 0;
         for(int i=0; i<numVoters; ++i) {
             voterList.add( createVoter(vIndex++, numIssues) );
         }
     }
 
-    public static Voter createVoter(int vIndex, int numIssues) {
-        Voter v = new Voter(vIndex);
+    public Voter createVoter(int vIndex, int numIssues) {
+        Voter v = new Voter(vIndex, this);
         for(int j=0; j<numIssues; ++j) {
             double issue;
             switch (activeDistribution) {
@@ -142,27 +167,13 @@ public class Simulation {
         return v;
     }
 
-    public static double genIssueValNormal(double multiplier) {
-        Random generator = new Random();
-        double val = generator.nextGaussian();
-        val*=multiplier;
-        return val;
-    }
-    
-    // Generate an issue value on the Bimodal distribution
-    // Passes in a double, disMode, that defines the mode of the distribution
-    // Gets a normal-distribution issue value with multiplier mode/divisor to limit the size of the graph
-    // HIGHER DIVISOR MEANS MORE CLUMPED. should be between 1 and 4
-    public static double genIssueValBiModal(double disMode) {
-        double issue = genIssueValNormal((disMode/2)) + disMode;
+    // Voter Management
 
-        Random generator = new Random();
-        int posneg = generator.nextInt(2);
-        // System.out.println("+-: " + posneg);
-        if (posneg % 2 == 0) {
-            issue*=-1;
+    // Loop through all the voters, make them cast their ballots / pick their candidates
+    public void castVotes() {
+        for (int i=0; i< voterList.size(); ++i) {
+            voterList.get(i).vote();
         }
-        return issue;
     }
 
     // run plurality election
@@ -192,11 +203,19 @@ public class Simulation {
         }
     }
 
+    // Accelerate the election round
+
+    public void nextRound() {
+        removeLastPlaceCandidate();
+        resetActiveCandidateVoteCounts();
+        castVotes();
+    }
+
     // run election (first written for plurality voting, will change later)
     public Candidate runElection() {
-        for (Voter v : voterList) {
-            v.vote().incrementVotes(); // NEED TO CHANGE. CANDIDATE VOTES ARE INCREMENTED IN THE VOTE METHOD
-        }
+        // for (Voter v : voterList) {
+        //     // v.vote().incrementVotes(); // NEED TO CHANGE. CANDIDATE VOTES ARE INCREMENTED IN THE VOTE METHOD
+        // }
 
         Candidate candLeader = activeCandidateList.get(0);
         for (Candidate c : activeCandidateList) {
@@ -211,7 +230,7 @@ public class Simulation {
     }
 
     // Method to fetch the Candidate with the most votes
-    public static Candidate getWinner() {
+    public Candidate getWinner() {
         Candidate candLeader = activeCandidateList.get(0);
         for (int i=0; i<activeCandidateList.size(); i++) {
             if (activeCandidateList.get(i).getVotes() > candLeader.getVotes() ) {
@@ -222,14 +241,47 @@ public class Simulation {
         return candLeader;
     }
 
+
+    // START: Static methods used to generate normal values
+
+    public static double genIssueValNormal(double multiplier) {
+        Random generator = new Random();
+        double val = generator.nextGaussian();
+        val*=multiplier;
+        return val;
+    }
+    
+    // Generate an issue value on the Bimodal distribution
+    // Passes in a double, disMode, that defines the mode of the distribution
+    // Gets a normal-distribution issue value with multiplier mode/divisor to limit the size of the graph
+    // HIGHER DIVISOR MEANS MORE CLUMPED. should be between 1 and 4
+    public static double genIssueValBiModal(double disMode) {
+        double issue = genIssueValNormal((disMode/2)) + disMode;
+
+        Random generator = new Random();
+        int posneg = generator.nextInt(2);
+        // System.out.println("+-: " + posneg);
+        if (posneg % 2 == 0) {
+            issue*=-1;
+        }
+        return issue;
+    }
+
+
+    // START: Simulation settings (voting mode, distribution, number of issues)
+
     // Getter for the active voting mode
-    public static VOTINGMODES getActiveMode() {
+    public VOTINGMODES getActiveMode() {
         return activeVotingMode;
+    }
+    // Getter for the active values distribution
+    public DISTRIBUTION getActiveDistribution() {
+        return activeDistribution;
     }
 
     // Setter for the active voting mode.
     // Passes in an integer. Integer corresponds to a different voting mode
-    public static void setActiveMode(int mode) {
+    public void setActiveMode(int mode) {
         switch (mode) {
             case 1:
                 activeVotingMode = VOTINGMODES.PLURALITY;
@@ -243,14 +295,9 @@ public class Simulation {
         }
     }
 
-    // Getter for the active values distribution
-    public static DISTRIBUTION getActiveDistribution() {
-        return activeDistribution;
-    }
-
     // Setter for the active distribution
     // Passes in an integer. Integer corresponds to a different distribution
-    public static void setActiveDistribution(int dist) {
+    public void setActiveDistribution(int dist) {
         switch (dist) {
             case 1:
                 activeDistribution = DISTRIBUTION.NORMAL;
