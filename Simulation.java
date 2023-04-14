@@ -56,7 +56,7 @@ public class Simulation {
         
         Candidate jack = new Candidate(0, "Jack Jackathy");
         jack.addIssue(50.0);
-        jack.addIssue(25.0);
+        jack.addIssue(50.0);
         Candidate paul = new Candidate(1, "Paul Paulerson");
         paul.addIssue(-87.0);
         paul.addIssue(-42.0);

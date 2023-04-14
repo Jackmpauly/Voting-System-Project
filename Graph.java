@@ -146,6 +146,7 @@ public class Graph extends JPanel {
         mySim.getCandidateVoteCounts();
         System.out.println("# of candidates: " + mySim.activeCandidateList.size());
         System.out.println("Winner of this round: " + mySim.getWinner().getName() );
+        new Approval(mySim).getSatisfactionRatings();
         System.out.println();
     }
 }

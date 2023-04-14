@@ -40,3 +40,12 @@ TODO: 3/30/23
 - Autogenerate candidates
 - Voting system type (settings)
 - (maybe) move some functionality to the simulation class?
+
+
+TODO 4/14/23
+
+- Make more voting systems: approval rating VOTING SYSTEM
+- Read in file with parameters for candidates, for voter distribution (# modes, where the modes are, etc), voting system
+- Get the 1-5 numerical satisfaction rating from the voter sat rating
+- in a single simulation, run multiple elections using the different voter distributions. Compare results.
+- 
