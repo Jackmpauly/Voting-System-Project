@@ -43,14 +43,14 @@ public class Graph extends JPanel {
 
     // START: GRAPHICS DRAW METHODS
 
-    public static void drawDot(Graphics g, int x, int y, int radius, int colorIdx) {
+    public static void drawDot(Graphics g, int x, int y, int radius, Color c) {
         // increase x and y by 250 to give them the correct coords on the graph
         x+=250;
         y+=250;
 
         // Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.CYAN};
         // Set the color of the circle to the index of colors and draw a filled circle
-        g.setColor(colors[colorIdx]);
+        g.setColor(c);
         g.fillOval(x - radius, 500 - y - radius, radius * 2, radius * 2);
 
         // Draw the stroke of the circle in black
@@ -98,6 +98,15 @@ public class Graph extends JPanel {
         // g.setColor( colors[colorIdx] );
     }
 
+    public static void drawCircle(Graphics g, int x, int y, int radius, Color c) {
+        // increase x and y by 250 to give them the correct coords on the graph
+        x+=250;
+        y+=250;
+
+        g.setColor(c);
+        g.drawOval(x - radius, 500 - y - radius, radius * 2, radius * 2);
+    }
+
     // END: GRAPHICS DRAW METHODS
 
     // Method to accelerate the election/vote
@@ -116,12 +125,16 @@ public class Graph extends JPanel {
         for(int i = 0; i < mySim.voterList.size(); ++i) {
             Voter v = mySim.voterList.get(i);
             Candidate c = v.getMyVote();
+            Color color = Color.YELLOW;
+            if(c != null) {
+                color = colors[c.getID()];
+            }
             
             drawDot(g, 
                 (v.getIssuesList().get(0)).intValue(), 
                 (v.getIssuesList().get(1)).intValue(), 
-                4, 
-                c.getID()
+                4,
+                color
             );
         }
 
@@ -140,8 +153,15 @@ public class Graph extends JPanel {
                 (c.getIssuesList().get(0)).intValue(),
                 (c.getIssuesList().get(1)).intValue(),
                 c.getID()
-            );   
-        }
+            );
+            // Draw circle around candidate
+            drawCircle(g,
+                (c.getIssuesList().get(0)).intValue(),
+                (c.getIssuesList().get(1)).intValue(),
+                mySim.getMaxVotingDistance(),
+                colors[c.getID()]
+            );
+            }
 
         mySim.getCandidateVoteCounts();
         System.out.println("# of candidates: " + mySim.activeCandidateList.size());

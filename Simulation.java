@@ -12,6 +12,7 @@ public class Simulation {
     // Simulation Settings
     private VOTINGMODES activeVotingMode;
     private DISTRIBUTION activeDistribution;
+    private int maxVotingDistance;
 
     enum DISTRIBUTION {
         NORMAL,
@@ -20,6 +21,7 @@ public class Simulation {
     enum VOTINGMODES {
         PLURALITY,
         RANKEDCHOICE,
+        APPROVAL
     }
 
     // CONSTRUCTORS
@@ -40,7 +42,6 @@ public class Simulation {
         // Custom Sim Settings
         setActiveMode(votingMode);
         setActiveDistribution(voterDistrMode);
-
     }
 
     // METHOD TO (RE)SET THE ACTIVE CANDIDATES TO ALL CANDIDATES
@@ -171,8 +172,20 @@ public class Simulation {
 
     // Loop through all the voters, make them cast their ballots / pick their candidates
     public void castVotes() {
-        for (int i=0; i< voterList.size(); ++i) {
-            voterList.get(i).vote();
+
+        // Simulate voting for the Approval Voting System
+        if (activeVotingMode == VOTINGMODES.APPROVAL) {
+            // System.out.println("here");
+            for (int i=0; i< voterList.size(); ++i) {
+                voterList.get(i).voteApproval(maxVotingDistance);
+            }
+        }
+        
+        // Simulate voting for the two other systems
+        else {
+            for (int i=0; i< voterList.size(); ++i) {
+                voterList.get(i).vote();
+            }
         }
     }
 
@@ -183,7 +196,7 @@ public class Simulation {
 
     // run ranked choice voting UNUSED
     public Candidate runRankedChoice(int numCandidates) {
-        Candidate currWinner = runElection();
+        // Candidate currWinner = runElection();
 
         // L + ratio
         Candidate candLoser = activeCandidateList.get(0);
@@ -278,6 +291,10 @@ public class Simulation {
     public DISTRIBUTION getActiveDistribution() {
         return activeDistribution;
     }
+    // Getter for the maxVotingDistance
+    public int getMaxVotingDistance() {
+        return maxVotingDistance;
+    }
 
     // Setter for the active voting mode.
     // Passes in an integer. Integer corresponds to a different voting mode
@@ -288,6 +305,9 @@ public class Simulation {
                 break;
             case 2:
                 activeVotingMode = VOTINGMODES.RANKEDCHOICE;
+                break;
+            case 3:
+                activeVotingMode = VOTINGMODES.APPROVAL;
                 break;
             default:
                 activeVotingMode = VOTINGMODES.PLURALITY;
@@ -309,5 +329,10 @@ public class Simulation {
                 activeDistribution = DISTRIBUTION.BIMODAL;
                 break;
         }
+    }
+
+    // Setter for the maxVotingDist
+    public void setMaxVotingDist(int d) {
+        maxVotingDistance = d;
     }
 }

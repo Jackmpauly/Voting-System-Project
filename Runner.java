@@ -8,6 +8,7 @@ public class Runner {
         int votingMode;
         int voterDistrMode;
         int numIssues;
+        int maxDistance = 100;
 
 
         System.out.println("          WELCOME TO VOTING SIMULATION");
@@ -28,7 +29,22 @@ public class Runner {
                 System.out.println("INVALID INPUT");
             }
         }
-        
+        // get user input for distance 
+        if (votingMode == 3) {
+            while(true){
+                System.out.println("\nPlease enter Approval voting distance threshold (default: 100): ");
+                String userInput = in.nextLine();
+                
+                try {
+                    Integer.parseInt(userInput);
+                    maxDistance = Integer.valueOf(userInput);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("INVALID INPUT");
+                }
+            }
+        }
+            
         // get user input for the voter distribution mode
         while(true){
             System.out.println("\nPlease Select a Voter Distribution Mode: ");
@@ -57,6 +73,8 @@ public class Runner {
                 System.out.println("INVALID INPUT");
             }
         }
+
+
         in.close();
 
         // Setting up the simulation object
@@ -66,6 +84,7 @@ public class Runner {
         // Create the candidates, generate the voters, set the active candidates
         s.createManualCandidate();
         s.generateAllVoters(251, numIssues);
+        s.setMaxVotingDist(maxDistance);
         s.castVotes();
         s.setActiveCandList();
 
