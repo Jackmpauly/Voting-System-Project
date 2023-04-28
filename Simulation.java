@@ -13,6 +13,7 @@ public class Simulation {
     private VOTINGMODES activeVotingMode;
     private DISTRIBUTION activeDistribution;
     private int maxVotingDistance;
+    private int numberofRoundsDone = 0;
 
     enum DISTRIBUTION {
         NORMAL,
@@ -196,23 +197,34 @@ public class Simulation {
 
     // run ranked choice voting UNUSED
     public Candidate runRankedChoice(int numCandidates) {
-        // Candidate currWinner = runElection();
-
-        // L + ratio
-        Candidate candLoser = activeCandidateList.get(0);
-        // finding the candidate with the least amount of votes
-        for (Candidate c : activeCandidateList) {
-            if (c.getVotes() < candLoser.getVotes()) {
-                candLoser = c;
-            }
-        }
-
-        activeCandidateList.remove(candLoser);
         
-        if (numCandidates == 2) {
-            return runElection();
+        // QUESTION FROM NAT 04/27/23, THIS IS THIS NEVER USED??
+
+        // // L + ratio
+        // Candidate candLoser = activeCandidateList.get(0);
+        // // finding the candidate with the least amount of votes
+        // for (Candidate c : activeCandidateList) {
+        //     if (c.getVotes() < candLoser.getVotes()) {
+        //         candLoser = c;
+        //     }
+        // }
+        
+        
+
+        // activeCandidateList.remove(candLoser);
+        if (numCandidates >= 2) {
+            Candidate currWinner = runElection();
+            removeLastPlaceCandidate();
+            numCandidates = candList.size();
+            return currWinner;
+        } else if (numCandidates == 1) {
+            Candidate emptyCandidate = new Candidate(0000, "0000");
+            System.out.println("Only 1 candidate left");
+            return emptyCandidate;
         } else {
-            return runRankedChoice(numCandidates);
+            Candidate emptyCandidate = new Candidate(0000, "0000");
+            System.out.println("Something went wrong!");
+            return emptyCandidate;
         }
     }
 
@@ -222,6 +234,20 @@ public class Simulation {
         removeLastPlaceCandidate();
         resetActiveCandidateVoteCounts();
         castVotes();
+        numberofRoundsDone++;
+    }
+
+    public boolean checkIfElectionDone() {
+        if (activeVotingMode == VOTINGMODES.PLURALITY){
+            if (numberofRoundsDone == 0) {
+                return true;
+            }
+        } else {
+            if (activeCandidateList.size() == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // run election (first written for plurality voting, will change later)
@@ -335,4 +361,5 @@ public class Simulation {
     public void setMaxVotingDist(int d) {
         maxVotingDistance = d;
     }
+
 }

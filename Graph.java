@@ -32,10 +32,21 @@ public class Graph extends JPanel {
 
         frame.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
+                // resets variable and checks if the election is done
+                boolean electionDone = false;
+                electionDone = mySim.checkIfElectionDone();
+
+                // if spacebar is pressed
                 int keyCode = e.getKeyCode();
-                if (keyCode == KeyEvent.VK_SPACE) {
+                if ((keyCode == KeyEvent.VK_SPACE) && !(electionDone)) {
                     System.out.println("Spacebar is pressed!");
+
+                    // advance the election
                     accelerateVote(canvas);
+                }
+                else if (electionDone){
+                    System.out.println("ELECTION IS COMPLETE! NO LONGER ACCEPTING INPUT!");
+                    // ADD SOME FUNCTION FOR THE USER TO EXIT THE PROGRAM 
                 }
             }
         });
