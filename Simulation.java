@@ -238,12 +238,12 @@ public class Simulation {
     }
 
     public boolean checkIfElectionDone() {
-        if (activeVotingMode == VOTINGMODES.PLURALITY){
+        if ((activeVotingMode == VOTINGMODES.PLURALITY) || (activeVotingMode == VOTINGMODES.APPROVAL)){
             if (numberofRoundsDone == 0) {
                 return true;
             }
         } else {
-            if (activeCandidateList.size() == 1) {
+            if (activeCandidateList.size() == 2) {
                 return true;
             }
         }

@@ -87,8 +87,10 @@ public class Runner {
         s.setMaxVotingDist(maxDistance);
         s.castVotes();
         s.setActiveCandList();
+        System.out.println("Press 'space' to advance to next round of simulation.");
 
         Graph g = new Graph(s);
+        g.setVotingMode(votingMode);
         g.start();
     }
 }

@@ -5,6 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 // import java.awt.Component;
 import javax.swing.JFrame;
+import java.util.Scanner;
 
 // import java.awt.*;
 // import java.awt.event.*;
@@ -15,6 +16,8 @@ public class Graph extends JPanel {
     private static Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.CYAN};
     // private static int count = 0;
     private Simulation mySim;
+    private boolean isApprovalVoting = false;
+
 
     public Graph(Simulation s) {
         mySim = s;
@@ -44,10 +47,17 @@ public class Graph extends JPanel {
                     // advance the election
                     accelerateVote(canvas);
                 }
-                else if (electionDone){
-                    System.out.println("ELECTION IS COMPLETE! NO LONGER ACCEPTING INPUT!");
-                    // ADD SOME FUNCTION FOR THE USER TO EXIT THE PROGRAM 
+                else if ((keyCode == KeyEvent.VK_SPACE) && (electionDone)) {
+                    System.out.println("Election is complete! Press 'q' to quit.");
                 }
+                else if ((keyCode == KeyEvent.VK_Q) && (electionDone)) {
+                    System.out.println("Quitting....");
+                    System.exit(0);
+                }
+                else if (keyCode != KeyEvent.VK_SPACE) {
+                    System.out.println("Enter a valid command: ");
+                }
+                
             }
         });
     }
@@ -165,19 +175,28 @@ public class Graph extends JPanel {
                 (c.getIssuesList().get(1)).intValue(),
                 c.getID()
             );
-            // Draw circle around candidate
-            drawCircle(g,
-                (c.getIssuesList().get(0)).intValue(),
-                (c.getIssuesList().get(1)).intValue(),
-                mySim.getMaxVotingDistance(),
-                colors[c.getID()]
-            );
+            // Draw circle around candidate if is approval voting
+            if (isApprovalVoting) {
+                drawCircle(g,
+                    (c.getIssuesList().get(0)).intValue(),
+                    (c.getIssuesList().get(1)).intValue(),
+                    mySim.getMaxVotingDistance(),
+                    colors[c.getID()]
+                );
             }
+        }
 
         mySim.getCandidateVoteCounts();
         System.out.println("# of candidates: " + mySim.activeCandidateList.size());
         System.out.println("Winner of this round: " + mySim.getWinner().getName() );
         new Approval(mySim).getSatisfactionRatings();
         System.out.println();
+        System.out.println("Press 'space' to advance to next round of simulation.\n");
+    }
+
+    public void setVotingMode(int votingMode){
+        if (votingMode == 3){ // if approval voting
+            isApprovalVoting = true;
+        }
     }
 }
