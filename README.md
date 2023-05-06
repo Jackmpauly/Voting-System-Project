@@ -1,5 +1,36 @@
 # CPSC 406 - VOTING SYSTEM PROJECT
-Jack, Gillian, Gabriel, Natalie
+Members: Jack, Gillian, Gabriel, Natalie
+
+## Introduction
+In this project, our goal is to simulate democracy by testing different voting systems and analyzing the effect it has on voter satisfaction. Through this simulation, we can observe the strengths and flaws of each voting system and quantify fairness through how satisfied the voters are with the outcome.
+
+## Literature Review
+### References
+* [A Liquid Perspective on Democratic Choice](https://bford.info/pub/soc/liquid/), Bryan Ford
+
+### Theoretical Background
+A voting system should aim to create a program where voters can be honest about their positions and viewpoints. However, this is an ongoing issue since many voters use strategy in the attempt to conclude with a result that benefits them the most. For this reason, it is interesting to look at different systems and simulate them so we can observe the differences. One example of this in real-world democracy is the concept of "spoiler candidates". If every voter voted for the candidate that most closely aligned with their values, two candidates with similar values could split voters. In an winner-takes-all election, dividing up the votes between two similar candidates could mean that a third candidate with undivided votes wins. See below.
+
+![A voting graph showing two candidates near each other and one candidate opposite the two candidates.](images/voting-simulation2.png?raw=true "Simulation 2")
+
+In the simulation above, run with a plurality voting system, Gillian wins the election by only two votes. Had this distribution been run in a ranked-choice setting, votes counting for Natalie would be redirected to Gabriel, and he would win handily.
+
+## Description
+Our project consists of considerate and strategic object-oriented design. The brain of our simulation is a class `Simulation.java`. This class creates the ArrayLists of `Candidate` and `Voter` objects, both of which are children of a larger `Person` class. Simulation generates the voters and candidates, conducts voting, and establishes the rules of the simulation. That information gets passed onto the `Graph.java` class, which interfaces with the Java Graphics library and draws a visual representation of the simulation.
+
+## Build Instructions
+To build and run the Voting System Simulation, do the following steps:
+1. ***Make sure you have the latest version of Java installed***
+2. cd to `/src/`
+3. run `javac *.java`
+4. run `java Runner`
+5. Follow the instructions on screen, give inputs that it asks for.
+
+## Testing
+
+## What works? What doesn't
+
+## Future Developments
 
 Classes:
 

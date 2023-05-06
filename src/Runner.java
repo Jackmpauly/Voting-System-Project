@@ -87,10 +87,15 @@ public class Runner {
         s.setMaxVotingDist(maxDistance);
         s.castVotes();
         s.setActiveCandList();
-        System.out.println("Press 'space' to advance to next round of simulation.");
 
-        Graph g = new Graph(s);
-        g.setVotingMode(votingMode);
-        g.start();
+        // if (args[0].equals("graph")) {
+        //     Graph g = new Graph(s);
+        //     g.start();
+        // } else {
+        //     TextGraphics tg = new TextGraphics(s);
+        //     tg.start();
+        // }
+        TextGraphics tg = new TextGraphics(s);
+        tg.start();
     }
 }

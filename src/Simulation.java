@@ -73,22 +73,28 @@ public class Simulation {
         gabriel.addIssue(50);
         gabriel.addIssue(-75);
 
-        candList.add( jack );
-        candList.add( paul );
-        candList.add( gillian );
-        candList.add( natalie );
-        candList.add( gabriel );
+        // candList.add( jack );
+        // candList.add( paul );
+        // candList.add( gillian );
+        // candList.add( natalie );
+        // candList.add( gabriel );
     }
 
     // Test method to generate candidates via a csv file
-    public static void generateCandidates() {
+    public void generateCandidates() {
         String line = "";
         String splitBy = ",";
+        int cID = 0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader("simulation1.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("../simulations/simulation2.csv"));
+            line = br.readLine();
             while((line = br.readLine()) != null) {
                 String[] csv = line.split(splitBy);
-                System.out.println(csv[0]);
+                System.out.println(csv[0] + csv[1] + csv[2] + csv[3]);
+                Candidate c = new Candidate(cID++, csv[0]);
+                c.addIssue(Integer.valueOf(csv[1]));
+                c.addIssue(Integer.valueOf(csv[2]));
+                candList.add(c);
             }
             br.close();
         } catch (IOException e) {
@@ -310,8 +316,17 @@ public class Simulation {
     // START: Simulation settings (voting mode, distribution, number of issues)
 
     // Getter for the active voting mode
-    public VOTINGMODES getActiveMode() {
-        return activeVotingMode;
+    public int getActiveMode() {
+        switch (activeVotingMode) {
+            case PLURALITY:
+                return 1;
+            case RANKEDCHOICE:
+                return 2;
+            case APPROVAL:
+                return 3;
+            default:
+                return 1;
+        }
     }
     // Getter for the active values distribution
     public DISTRIBUTION getActiveDistribution() {
