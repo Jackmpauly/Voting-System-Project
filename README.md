@@ -3,6 +3,7 @@ Members: Jack, Gillian, Gabriel, Natalie
 
 ## Introduction
 In this project, our goal is to simulate democracy by testing different voting systems and analyzing the effect it has on voter satisfaction. Through this simulation, we can observe the strengths and flaws of each voting system and quantify fairness through how satisfied the voters are with the outcome.
+[Final presentation.]([https://bford.info/pub/soc/liquid/](https://docs.google.com/presentation/d/1lnj-1Q8w0nWQG3Lx8U_SRHHrw7u-Zu0Y/edit?usp=sharing&ouid=112817791602145407975&rtpof=true&sd=true))
 
 ## Literature Review
 ### References
