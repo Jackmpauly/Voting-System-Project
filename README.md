@@ -33,58 +33,12 @@ To build and run the Voting System Simulation, do the following steps:
 For testing, we created various .csv files to act as configuration files for our simulation. These .csv files contain the names and values (locations) of all of the candidates. By using these files, we could test various situations that may arise during an election, such as spoiler and outlier candidates.
 
 ## What works? What doesn't
-Currently, the program can accurately simulate and depict an election using three different 
+Currently, the program can accurately simulate and depict an election using three different voting systems.
 
 ## Future Developments
 
-Classes:
-
-- Simulation
-  - + boolean runoff
-  - + 
-    - runElection(LinkedList<Voter> voterList, LinkedList<Candidate> candList) // runs recursively in ranked choice
-    - setPlurality(int votingType) // set the variables to. votingType is the voting system we need to use. 
-    - setRankedChoice() 
-    - calcApprovalRating()
-    - findDistance()
-    - setStage() // sets up the voters and candidates. reads from file
-- Person
-  - Candidate
-  - Voter
-
-## Week 8 Update: ##
-Execution:
-Download files
-Type javac *.java
-Type java Runner
-Enter 1 for plurality voting or 2 for ranked choice voting
-If ranked choice was chosen, hit enter to move the simulation forward one runoff election at a time
-
-Known Bugs:
-It is currently only running on Mac computers due to our method of visualizing the data.
-
-Progress Compared to Plan:
-We have completed everything we set out to do from our original MVP planning.  In addition to those requirements, we have also included a graphing mechanism to depict an election with up to two axis of values.
-
-Further Progress:
-Fixing the problem of the graph display only working on Mac computers is something that we are actively trying to fix.  The next improvement to be done is implementing an approval/disapproval rating system.  This will allows us to add a statistical backing and analysis to our simulation.  We also plan to implement a 3rd type of voting where voters can select multiple candidates at the same time.  We plan to continue to meet weekly in order to further these goals.
-
-
-TODO: 3/30/23
-
-- Bimodal distribution (two normal distributions)
-- Autogenerate candidates
-- Voting system type (settings)
-- (maybe) move some functionality to the simulation class?
-
-
-TODO 4/14/23
-
-- Make more voting systems: approval rating VOTING SYSTEM
-
-
-TODO 4/26/23
-- Display after election number of people who did not vote
-- Read in file with parameters for candidates, for voter distribution (# modes, where the modes are, etc), voting system
-- Get the 1-5 numerical satisfaction rating from the voter sat rating
-- in a single simulation, run multiple elections using the different voter distributions. Compare results.
+The object-oriented nature of our project makes it extremely malleable and modular. Future developments may include:
+- Writing more simulation/candidate situations
+- Creating different accurate voter distributions
+- Drawing from historical data to create voter/candidate distributions
+- Scaling the simulation up to fit for larger, more complex voters with varying distributions and weighted values.
