@@ -87,15 +87,16 @@ public class Runner {
         s.setMaxVotingDist(maxDistance);
         s.castVotes();
         s.setActiveCandList();
+        s.setSimFile(args[0]);
 
-        // if (args[0].equals("graph")) {
-        //     Graph g = new Graph(s);
-        //     g.start();
-        // } else {
-        //     TextGraphics tg = new TextGraphics(s);
-        //     tg.start();
-        // }
-        TextGraphics tg = new TextGraphics(s);
-        tg.start();
+        if (args.length >= 2 && args[1].toLowerCase().equals("graph")) {
+            Graph g = new Graph(s);
+            g.start();
+        } else {
+            TextGraphics tg = new TextGraphics(s);
+            tg.start();
+        }
+        // TextGraphics tg = new TextGraphics(s);
+        // tg.start();
     }
 }

@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class TextGraphics {
     private Simulation mySim;
@@ -8,8 +10,24 @@ public class TextGraphics {
     }
 
     public void start() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("-----------STARTING SIMULATION-----------");
         draw();
+        // try {
+        //     while (true) {
+        //         draw();
+        //         System.out.println("Press enter to advance ");
+        //         String line = scanner.nextLine();
+        //         // if (line.equals("q")) {
+        //         //     break;
+        //         // } else {
+        //         //     mySim.nextRound();
+        //         // }
+        //     }
+        // } catch (IllegalStateException | NoSuchElementException e) {
+        //     System.out.println("System.in has been closed. Exiting");
+        // }
+        // scanner.close();
     }
 
     public void draw() {

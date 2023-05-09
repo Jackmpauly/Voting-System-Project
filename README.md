@@ -24,12 +24,16 @@ To build and run the Voting System Simulation, do the following steps:
 1. ***Make sure you have the latest version of Java installed***
 2. cd to `/src/`
 3. run `javac *.java`
-4. run `java Runner`
+4. run with the following format: `java Runner <CSV FILENAME> <graph>`.
+   1. `<CSV FILENAME>` This is the name of the .csv file located in the simulations folder. The .csv file defines the candidates to be used in the simulation.
+   2. `<graph>` Type `graph` as a second argument in the command line to run the simulation using the Java graphics. If you leave the argument empty, then it will use text-based graphics.
 5. Follow the instructions on screen, give inputs that it asks for.
 
 ## Testing
+For testing, we created various .csv files to act as configuration files for our simulation. These .csv files contain the names and values (locations) of all of the candidates. By using these files, we could test various situations that may arise during an election, such as spoiler and outlier candidates.
 
 ## What works? What doesn't
+Currently, the program can accurately simulate and depict an election using three different 
 
 ## Future Developments
 

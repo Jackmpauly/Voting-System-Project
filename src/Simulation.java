@@ -3,6 +3,7 @@ import java.util.Random;
 import java.io.BufferedReader;  
 import java.io.FileReader;  
 import java.io.IOException;
+import java.io.File;
 
 public class Simulation {
     public ArrayList<Candidate> candList = new ArrayList<Candidate>();
@@ -14,6 +15,7 @@ public class Simulation {
     private DISTRIBUTION activeDistribution;
     private int maxVotingDistance;
     private int numberofRoundsDone = 0;
+    private String filename;
 
     enum DISTRIBUTION {
         NORMAL,
@@ -375,6 +377,16 @@ public class Simulation {
     // Setter for the maxVotingDist
     public void setMaxVotingDist(int d) {
         maxVotingDistance = d;
+    }
+
+    // Setter for the filename
+    public void setSimFile(String filename) {
+        File f = new File("../simulations/" + filename);
+        if (f.exists() && !f.isDirectory()) {
+            this.filename = filename;
+        } else {
+            this.filename = "simulation2.csv";
+        }
     }
 
 }
