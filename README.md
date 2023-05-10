@@ -8,6 +8,10 @@ In this project, our goal is to simulate democracy by testing different voting s
 ## Literature Review
 ### References
 * [A Liquid Perspective on Democratic Choice](https://bford.info/pub/soc/liquid/), Bryan Ford
+This lengthy article discusses a multitude of things related to voting in the modern age.  The main goal proposed is that democracy should be more liquid and continue to change in order to represent voters most accurately.  This ranges from mindsets around voting to different voting systems.
+* [Variants of Ranked-Choice Voting from a Strategic Perspective](https://www.cogitatiopress.com/politicsandgovernance/article/view/3955)
+This article examines different types of ranked choice voting and their effects.  We decided to use runoff ranked choice due to its easy of understanding and implementation.  While we only used one type of ranked choice, this paper served to spark ideas of voting and measuring success when it comes to democracy.
+
 
 ### Theoretical Background
 A voting system should aim to create a program where voters can be honest about their positions and viewpoints. However, this is an ongoing issue since many voters use strategy in the attempt to conclude with a result that benefits them the most. For this reason, it is interesting to look at different systems and simulate them so we can observe the differences. One example of this in real-world democracy is the concept of "spoiler candidates". If every voter voted for the candidate that most closely aligned with their values, two candidates with similar values could split voters. In an winner-takes-all election, dividing up the votes between two similar candidates could mean that a third candidate with undivided votes wins. See below.
