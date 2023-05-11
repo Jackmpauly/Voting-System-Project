@@ -43,8 +43,6 @@ public class Approval {
         return 1 - (distance / getMaxDistance());
     }
 
-    // TODO: Can get the 1-5 numerical satisfaction rating from the voter sat rating
-
     // Use the winning candidate and calucate the winning distance
     public double getMaxDistance() {
         Candidate winner = mySim.getWinner();
