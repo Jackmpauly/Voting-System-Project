@@ -6,7 +6,6 @@ public class Runner {
         Scanner in = new Scanner(System.in);
         int voterDistrMode;
         int numIssues;
-        int maxDistance = 100;
         int numVoters = 251;
 
 

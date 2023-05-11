@@ -92,8 +92,6 @@ public class Graph extends JPanel {
         g.drawString(name, x, 500 - y);
     }
 
-    // TODO: Draw rectangle. make it bigger too
-
     public static void drawLine(Graphics g, int x1, int y1, int x2, int y2, int colorIdx) {
         // increase x and y by 250 to give them the correct coords on the graph
         x1+=250;
