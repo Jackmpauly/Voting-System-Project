@@ -1,5 +1,7 @@
 // import java.util.ArrayList;
 
+import java.text.DecimalFormat;
+
 public class Approval {
     Simulation mySim;
 
@@ -24,10 +26,12 @@ public class Approval {
         }
 
         avgSat /= mySim.voterList.size();
+        DecimalFormat decimalFormat = new DecimalFormat("#.####");
         
-        System.out.println("Average Satisfaction Rating: " + avgSat);
-        System.out.println("Minimum Satisfaction Rating: " + minSat);
-        System.out.println("Maximum Satisfaction Rating: " + maxSat);
+        System.out.println();
+        System.out.println("Average Satisfaction Rating: " + Double.parseDouble(decimalFormat.format(avgSat)));
+        System.out.println("Minimum Satisfaction Rating: " + Double.parseDouble(decimalFormat.format(minSat)));
+        System.out.println("Maximum Satisfaction Rating: " + Double.parseDouble(decimalFormat.format(maxSat)));
     }
 
     // Calculate satisfaction rating

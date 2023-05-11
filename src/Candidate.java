@@ -1,4 +1,4 @@
-public class Candidate extends Person {
+public class Candidate extends Person implements Comparable<Candidate> {
     private int votes;
     private String name;
     private boolean isRunning; 
@@ -40,9 +40,18 @@ public class Candidate extends Person {
         return isRunning;
     }
 
-
     // get the name
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Candidate c) {
+        int difference = c.getVotes() - this.getVotes();
+        if (difference == 0) {
+            return 0;
+        } else {
+            return (difference/Math.abs(difference));
+        }
     }
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.io.BufferedReader;  
 import java.io.FileReader;  
@@ -11,11 +12,12 @@ public class Simulation {
     public ArrayList<Voter> voterList = new ArrayList<Voter>();
 
     // Simulation Settings
-    private VOTINGMODES activeVotingMode;
+    public VOTINGMODES activeVotingMode;
     private DISTRIBUTION activeDistribution;
-    private int maxVotingDistance;
+    private int maxVotingDistance = 100;
     private int numberofRoundsDone = 0;
     private String filename;
+    private int numIssues = 2;
 
     enum DISTRIBUTION {
         NORMAL,
@@ -29,18 +31,31 @@ public class Simulation {
 
     // CONSTRUCTORS
     public Simulation() {
+        // The file
+        filename = "simulation1.csv";
+
+        // The Candidates
         candList = new ArrayList<Candidate>();
+        generateCandidates();
+        
+        // The voters
         voterList = new ArrayList<Voter>();
-        activeCandidateList = candList;
+        
         
         // Default Sim Settings
         activeVotingMode = VOTINGMODES.RANKEDCHOICE;
         activeDistribution = DISTRIBUTION.BIMODAL;
     }
-    public Simulation(int votingMode, int voterDistrMode) {
+    public Simulation(int votingMode, int voterDistrMode, String filename) {
+        // The file
+        this.filename = filename;
+
+        // The candidates
         candList = new ArrayList<Candidate>();
+        generateCandidates();
+
+        // The voters
         voterList = new ArrayList<Voter>();
-        activeCandidateList = candList;
         
         // Custom Sim Settings
         setActiveMode(votingMode);
@@ -56,7 +71,7 @@ public class Simulation {
 
     // Method to create candidates manually
     public void createManualCandidate(){
-        generateCandidates();
+        // generateCandidates();
         
         Candidate jack = new Candidate(0, "Jack Jackathy");
         jack.addIssue(50.0);
@@ -75,11 +90,11 @@ public class Simulation {
         gabriel.addIssue(50);
         gabriel.addIssue(-75);
 
-        // candList.add( jack );
-        // candList.add( paul );
-        // candList.add( gillian );
-        // candList.add( natalie );
-        // candList.add( gabriel );
+        candList.add( jack );
+        candList.add( paul );
+        candList.add( gillian );
+        candList.add( natalie );
+        candList.add( gabriel );
     }
 
     // Test method to generate candidates via a csv file
@@ -87,12 +102,13 @@ public class Simulation {
         String line = "";
         String splitBy = ",";
         int cID = 0;
+        // System.out.println("../simulations/" + filename);
         try {
-            BufferedReader br = new BufferedReader(new FileReader("../simulations/simulation2.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("../simulations/" + filename));
             line = br.readLine();
             while((line = br.readLine()) != null) {
                 String[] csv = line.split(splitBy);
-                System.out.println(csv[0] + csv[1] + csv[2] + csv[3]);
+                // System.out.println(csv[0] + csv[1] + csv[2] + csv[3]);
                 Candidate c = new Candidate(cID++, csv[0]);
                 c.addIssue(Integer.valueOf(csv[1]));
                 c.addIssue(Integer.valueOf(csv[2]));
@@ -103,6 +119,8 @@ public class Simulation {
             e.printStackTrace();
         }
 
+        // Set the Active Candidate List
+        activeCandidateList = candList;
     }
 
     // Candidate Management
@@ -131,7 +149,7 @@ public class Simulation {
         Candidate c;
         for(int i=0; i < activeCandidateList.size(); ++i) {
             c = activeCandidateList.get(i);
-            System.out.println(c.getName() + " (" + c.getID() + "): " + c.getVotes());
+            System.out.println(c.getName() + ": " + c.getVotes());
         }
     }
 
@@ -144,10 +162,16 @@ public class Simulation {
         }
     }
 
+    // Sorting the candidates by votes
+    public void sortCandidates() {
+        Collections.sort(activeCandidateList);
+    }
+
     // START: VOTER GENERATION
 
     // METHOD TO GENERATE VOTERS GIVEN DISTRIBUTION
     public void generateAllVoters(int numVoters, int numIssues) {
+        this.numIssues = numIssues;
         voterList.clear(); // clear the voterList
 
         // Loop through the number of voters and create voters.
@@ -175,6 +199,15 @@ public class Simulation {
             v.addIssue( issue );
         }
         return v;
+    }
+
+    // Copy the voters
+    public void copyVoterList(ArrayList<Voter> voterList) {
+        // Iterate through the voterlist and clone
+        for (int i=0; i<voterList.size(); ++i) {
+            Voter v = new Voter(i, voterList.get(i).getIssuesList(), this);
+            this.voterList.add(v);
+        }
     }
 
     // Voter Management
@@ -205,19 +238,6 @@ public class Simulation {
 
     // run ranked choice voting UNUSED
     public Candidate runRankedChoice(int numCandidates) {
-        
-        // QUESTION FROM NAT 04/27/23, THIS IS THIS NEVER USED??
-
-        // // L + ratio
-        // Candidate candLoser = activeCandidateList.get(0);
-        // // finding the candidate with the least amount of votes
-        // for (Candidate c : activeCandidateList) {
-        //     if (c.getVotes() < candLoser.getVotes()) {
-        //         candLoser = c;
-        //     }
-        // }
-        
-        
 
         // activeCandidateList.remove(candLoser);
         if (numCandidates >= 2) {
@@ -337,6 +357,16 @@ public class Simulation {
     // Getter for the maxVotingDistance
     public int getMaxVotingDistance() {
         return maxVotingDistance;
+    }
+
+    // Getter for number of issues
+    public int getNumIssues() {
+        return numIssues;
+    }
+
+    // Getter for voterList
+    public ArrayList<Voter> getVoterList() {
+        return voterList;
     }
 
     // Setter for the active voting mode.

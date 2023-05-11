@@ -8,9 +8,16 @@ public class Voter extends Person{
     private ArrayList<Candidate> candidatesApproved; 
     // FIX ALL INSTANCES OF CANDLIST // CHANGE TO activeCandidateList
 
+    // Constructor for Voter
     public Voter(int id, Simulation s) {
         super(id);
-        // this.candList = s.candList;
+        this.activeCandidateList = s.activeCandidateList;
+        candidatesApproved = new ArrayList<Candidate>();
+    }
+
+    // Overloaded constructor for Voter
+    public Voter(int id, ArrayList<Double> issuesList, Simulation s) {
+        super(id, issuesList);
         this.activeCandidateList = s.activeCandidateList;
         candidatesApproved = new ArrayList<Candidate>();
     }

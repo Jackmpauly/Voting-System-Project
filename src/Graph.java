@@ -15,13 +15,15 @@ public class Graph extends JPanel {
     private static Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.CYAN};
     // private static int count = 0;
     private Simulation mySim;
+    private String graphName = "Graph";
 
-    public Graph(Simulation mySim) {
+    public Graph(Simulation mySim, String graphName) {
         this.mySim = mySim;
+        this.graphName = graphName;
     }
 
     public void start() {
-        JFrame frame = new JFrame("My Graph");
+        JFrame frame = new JFrame(graphName);
         Graph canvas = this; // Might need to fix this...
         frame.add(canvas);
         frame.setSize(500, 500);
@@ -29,6 +31,8 @@ public class Graph extends JPanel {
         frame.setVisible(true);
 
         System.out.println("-----------STARTING SIMULATION-----------");
+        System.out.println("Voter distribution mode: " + mySim.getActiveDistribution());
+        System.out.println("Issues per voter: " + mySim.getNumIssues());
 
         frame.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -159,12 +163,12 @@ public class Graph extends JPanel {
                 c.getID()
             );
             // Write their name too
-            writeName(g,
-                c.getName(),
-                (c.getIssuesList().get(0)).intValue(),
-                (c.getIssuesList().get(1)).intValue(),
-                c.getID()
-            );
+            // writeName(g,
+            //     c.getName(),
+            //     (c.getIssuesList().get(0)).intValue(),
+            //     (c.getIssuesList().get(1)).intValue(),
+            //     c.getID()
+            // );
             // Draw circle around candidate
             if(mySim.getActiveMode() == 3) {
                 drawCircle(g,
@@ -176,14 +180,16 @@ public class Graph extends JPanel {
             }
         }
 
-        mySim.getCandidateVoteCounts();
+
+        // Get the votes and display them on the screen
+        mySim.sortCandidates();
         for (int i=0; i<mySim.activeCandidateList.size(); ++i) {
             Candidate c = mySim.activeCandidateList.get(i);
             g.setColor(colors[c.getID()]);
             g.drawString(c.getName() + ": " + c.getVotes(), 0, 25 * (i+1));
         }
-        System.out.println("# of candidates: " + mySim.activeCandidateList.size());
-        System.out.println("Winner of this round: " + mySim.getWinner().getName() );
+        // System.out.println("# of candidates: " + mySim.activeCandidateList.size());
+        // System.out.println("Winner of this round: " + mySim.getWinner().getName() );
         new Approval(mySim).getSatisfactionRatings();
         System.out.println();
     }

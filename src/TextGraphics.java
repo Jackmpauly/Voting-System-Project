@@ -1,39 +1,39 @@
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class TextGraphics {
     private Simulation mySim;
+    private String name;
 
-    public TextGraphics(Simulation mySim) { 
+    public TextGraphics(Simulation mySim, String name) { 
         this.mySim = mySim;
+        this.name = name;
     }
 
     public void start() {
-        Scanner scanner = new Scanner(System.in);
+        
+        // accelerate rounds if ranked choice
+        if (mySim.getActiveMode() == 2) {
+            while (mySim.activeCandidateList.size() > 2) {
+                mySim.nextRound();
+            }
+        }
+        
+        // display the graph if plurality
+        if (mySim.getActiveMode() == 1) {
+            draw();
+        }
+        
         System.out.println("-----------STARTING SIMULATION-----------");
-        draw();
-        // try {
-        //     while (true) {
-        //         draw();
-        //         System.out.println("Press enter to advance ");
-        //         String line = scanner.nextLine();
-        //         // if (line.equals("q")) {
-        //         //     break;
-        //         // } else {
-        //         //     mySim.nextRound();
-        //         // }
-        //     }
-        // } catch (IllegalStateException | NoSuchElementException e) {
-        //     System.out.println("System.in has been closed. Exiting");
-        // }
-        // scanner.close();
+        System.out.println("Voting System: " + name);
+        mySim.sortCandidates();
+        mySim.getCandidateVoteCounts();
+        new Approval(mySim).getSatisfactionRatings();
     }
 
     public void draw() {
         ArrayList<String> graph = new ArrayList<String>();
         for (int i=0; i<51; ++i) {
-            graph.add("                                                  |                                                  ");
+            graph.add(            "                                                  |                                                  ");
         }
         graph.set(0 , "                                                  ^                                                  ");
         graph.set(50, "                                                  v                                                  ");
@@ -51,8 +51,8 @@ public class TextGraphics {
             xCoord = (xCoord / 10) * 2;
             yCoord/=10;
             String newLine = graph.get(25-yCoord).substring(0, 50+xCoord) 
-                + "• "
-                + graph.get(25-yCoord).substring(50+xCoord+2);
+                + "•"
+                + graph.get(25-yCoord).substring(50+xCoord+1);
             
             graph.set(25-yCoord, newLine);
         }
@@ -65,8 +65,8 @@ public class TextGraphics {
             // take example. xCoord = -100, yCoord = -100 
             xCoord = (xCoord / 10) * 2;
             yCoord/= 10;
-            System.out.println(xCoord);
-            System.out.println(yCoord);
+            // System.out.println(xCoord);
+            // System.out.println(yCoord);
             
             String newLine = graph.get(25-yCoord).substring(0, 50+xCoord) 
                 + c.getName().substring(0, 2) 
@@ -78,10 +78,5 @@ public class TextGraphics {
         for (int i=0; i<graph.size(); ++i) {
             System.out.println(graph.get(i));
         }
-        mySim.getCandidateVoteCounts();
-        System.out.println("# of candidates: " + mySim.activeCandidateList.size());
-        System.out.println("Winner of this round: " + mySim.getWinner().getName() );
-        new Approval(mySim).getSatisfactionRatings();
-        System.out.println();
     }
 }

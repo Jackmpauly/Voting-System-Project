@@ -10,6 +10,11 @@ public class Person {
         issuesList = new ArrayList<Double>();
     }
 
+    public Person(int id, ArrayList<Double> issuesList) {
+        this.id = id;
+        this.issuesList = issuesList;
+    }
+
     // calculate the difference between two Person objects using their values
     public double getDistance(Person p) {
         double radicand = 0; // the stuff under the square root

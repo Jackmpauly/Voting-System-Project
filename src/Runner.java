@@ -4,46 +4,28 @@ import java.util.Scanner;
 public class Runner {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-
-        int votingMode;
         int voterDistrMode;
         int numIssues;
         int maxDistance = 100;
+        int numVoters = 251;
 
 
         System.out.println("          WELCOME TO VOTING SIMULATION");
+        // String userInput = in.nextLine();
         
-        // get user input for the voting mode
-        while(true){
-            System.out.println("\nPlease Select A Voting Mode: ");
-            System.out.println("   Enter '1' for Plurality Voting ");
-            System.out.println("   Enter '2' for Ranked Choice Voting ");
-            System.out.println("   Enter '3' for Approval Voting ");
-            String userInput = in.nextLine();
-
-            if (userInput.equals("1") || userInput.equals("2") || userInput.equals("3")){
-                votingMode = Integer.valueOf(userInput);
-                break;
-            }
-            else{
-                System.out.println("INVALID INPUT");
-            }
-        }
         // get user input for distance 
-        if (votingMode == 3) {
             while(true){
-                System.out.println("\nPlease enter Approval voting distance threshold (default: 100): ");
+                System.out.println("\nPlease enter number of voters (default: 251): ");
                 String userInput = in.nextLine();
                 
                 try {
                     Integer.parseInt(userInput);
-                    maxDistance = Integer.valueOf(userInput);
+                    numVoters = Integer.valueOf(userInput);
                     break;
                 } catch (NumberFormatException e) {
                     System.out.println("INVALID INPUT");
                 }
             }
-        }
             
         // get user input for the voter distribution mode
         while(true){
@@ -77,24 +59,41 @@ public class Runner {
 
         in.close();
 
-        // Setting up the simulation object
+        // Setting up the simulation objects
 
-        Simulation s = new Simulation(votingMode, voterDistrMode);
+        // Create the plurality Simulation.
+        Simulation plurality = new Simulation(1, voterDistrMode, args[0]);
+        // Generate the voters
+        plurality.generateAllVoters(numVoters, numIssues);
 
-        // Create the candidates, generate the voters, set the active candidates
-        s.createManualCandidate();
-        s.generateAllVoters(251, numIssues);
-        s.setMaxVotingDist(maxDistance);
-        s.castVotes();
-        s.setActiveCandList();
-        s.setSimFile(args[0]);
+        // Create the rankedChoice Simulation. Use the plurality system's voters.
+        Simulation rankedChoice = new Simulation(2, voterDistrMode, args[0]);
+        rankedChoice.copyVoterList(plurality.getVoterList());
+        
+        // Create the approval Simulation. Use the plurality system's voters.
+        Simulation approval = new Simulation(3, voterDistrMode, args[0]);
+        approval.copyVoterList(plurality.getVoterList());
+        
+        plurality.castVotes();
+        rankedChoice.castVotes();
+        approval.castVotes();
 
         if (args.length >= 2 && args[1].toLowerCase().equals("graph")) {
-            Graph g = new Graph(s);
-            g.start();
+            Graph pluralityGraph = new Graph(plurality, "Plurality");
+            Graph rankedChoiceGraph = new Graph(rankedChoice, "Ranked Choice");
+            Graph approvalGraph = new Graph(approval, "Approval");
+            
+            pluralityGraph.start();
+            rankedChoiceGraph.start();
+            approvalGraph.start();
         } else {
-            TextGraphics tg = new TextGraphics(s);
-            tg.start();
+            TextGraphics pluralityGraph = new TextGraphics(plurality, "Plurality");
+            TextGraphics rankedChoiceGraph = new TextGraphics(rankedChoice, "Ranked Choice");
+            TextGraphics approvalGraph = new TextGraphics(approval, "Approval");
+            
+            pluralityGraph.start();
+            rankedChoiceGraph.start();
+            approvalGraph.start();
         }
         // TextGraphics tg = new TextGraphics(s);
         // tg.start();
