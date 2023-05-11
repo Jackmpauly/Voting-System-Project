@@ -37,7 +37,7 @@ To build and run the Voting System Simulation, do the following steps:
 For testing, we created various .csv files to act as configuration files for our simulation. These .csv files contain the names and values (locations) of all of the candidates. By using these files, we could test various situations that may arise during an election, such as spoiler and outlier candidates.
 
 ## What works? What doesn't
-Currently, the program can accurately simulate and depict an election using three different voting systems.
+Currently, the program can accurately simulate and depict an election using three different voting systems. After reading candidate information from the .csv file, the program generates a randomly generates 251 voters. Every aspect of the voting systems we implemented works.
 
 ## Future Developments
 
